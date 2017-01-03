@@ -45,30 +45,18 @@ app.fetch = function() {
     // This is the url you should use to communicate with the parse API server.
     url: 'https://api.parse.com/1/classes/messages',
     type: 'GET',
-    data: '', // filter by 
-    dataFilter: function(data) {
-      //console.log('inside dataFilter', data);
-      //fetch message only if message is newer than our most recent chached message. 
-      //if message is older than our most recent message delete message
-      var parsedData = JSON.parse(data);
-       //console.log('array?', Array.isArray(parsedData.results));
-      for (var i = 0; i < parsedData.results.length; i++) {
-        //send each message object into renderMessage
-        debugger;
-        if (messages.indexOf(JSON.stringify(parsedData.results[i])) !== -1) {
-          parsedData.results.splice(i, 1);
-        }
-      }
-      return JSON.stringify(parsedData);
-    },
+    data: 'order=-createdAt', 
     success: function (data) {
 
       console.log('data in success', data);
-      // split up data object to get each message object
-      // data.results =[{message}, {message}..]
-      //iterate over data.results
+
       for (var i = 0; i < data.results.length; i++) {
-        app.renderMessage(data.results[i]);  
+        //console.log(messages);
+        //console.log(JSON.stringify(data.results[i]));
+        if (messages.indexOf(JSON.stringify(data.results[i])) === -1) {
+          console.log(data.results[i]); 
+          app.renderMessage(data.results[i]);
+        }  
       }
 
       console.log('chatterbox: Message received');
@@ -82,20 +70,6 @@ app.fetch = function() {
 
 app.clearMessages = function() {
 
-  // $.ajax({
-  //   // This is the url you should use to communicate with the parse API server.
-  //   url: undefined,
-  //   type: 'DELETE',
-  //   data: $('#chats'),
-  //   contentType: 'application/json',
-  //   success: function (data) {
-  //     console.log('chatterbox: Message sent');
-  //   },
-  //   error: function (data) {
-  //     // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
-  //     console.error('chatterbox: Failed to send message', data);
-  //   }
-  // });
   messages = [];
   $('#chats').html('');
 };
@@ -106,7 +80,7 @@ app.renderMessage = function(message) {
   messages.push(stringifiedMessage);  
 
   var $username = $(message.username);
-  var messageNode = $('#chats').append('<p>' + '<a href=# class=username' + ' nodename = ' + $username.selector + '>' + $username.selector + '</a>' + ': ' + message.text + '</p>');
+  var messageNode = $('#chats').prepend('<p>' + '<a href=# class=username' + ' nodename = ' + $username.selector + '>' + $username.selector + '</a>' + ': ' + message.text + '</p>');
   // think about using html handlers
   $('.username').on('click', function() { 
     console.log($(this).attr('nodename'));
@@ -125,9 +99,9 @@ app.renderRoom = function(roomName) {
 app.init = function() {
   // should populate our timeline with messages from server
   app.fetch();
-  // setTimeout(function() {
-  //   app.init();
-  // }, 1000);
+  setTimeout(function() {
+    app.init();
+  }, 1000);
 };
 
 app.init();

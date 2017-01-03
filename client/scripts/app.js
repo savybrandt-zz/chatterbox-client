@@ -3,6 +3,24 @@
 var app = {};
 var friends = [];
 
+$(document).ready(function() {
+  $('.username').on('click', function() { 
+    console.log($(this).attr('nodename'));
+    console.log('inside onlick');  
+    console.log($(this).attr('nodeName'));
+    //friends.push($(this.attr('nodeName'));
+    app.handleUsernameClick($(this).attr('nodename'));
+  });
+  
+  $('#send .submit').on('submit', function() {
+  //debugger;
+    console.log($('#message').val());
+    app.handleSubmit($('#message').val());  
+  });
+});
+
+app.server = 'https://api.parse.com/1/classes/messages';
+
 
 app.send = function(message) {
   $.ajax({
@@ -24,16 +42,18 @@ app.send = function(message) {
 app.fetch = function() {
   $.ajax({
     // This is the url you should use to communicate with the parse API server.
-    url: undefined,
+    url: 'https://api.parse.com/1/classes/messages',
     type: 'GET',
-    data: JSON.stringify(message),
+    data: ' ',
     contentType: 'application/json',
     success: function (data) {
-      console.log('chatterbox: Message sent');
+      app.renderMessage(data);
+      console.log(data);
+      console.log('chatterbox: Message received');
     },
     error: function (data) {
       // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
-      console.error('chatterbox: Failed to send message', data);
+      console.error('chatterbox: Failed to fetch message', data);
     }
   });
 };
@@ -62,7 +82,14 @@ app.renderMessage = function(message) {
  
   var $username = $(message.username);
   var messageNode = $('#chats').append('<p>' + '<a href=# class=username' +  ' nodename = ' + $username.selector + '>' + $username.selector + '</a>' + ': ' + message.text + '</p>');
-
+  // think about using html handlers
+  $('.username').on('click', function() { 
+    console.log($(this).attr('nodename'));
+    console.log('inside onlick');  
+    console.log($(this).attr('nodeName'));
+    //friends.push($(this.attr('nodeName'));
+    app.handleUsernameClick($(this).attr('nodename'));
+  });
 };
 
 app.renderRoom = function(roomName) {
@@ -71,18 +98,7 @@ app.renderRoom = function(roomName) {
 
 
 app.init = function() {
-
-  $(document).ready(function() {
-
-    $('.username').on('click', function() { 
-      console.log($(this).attr('nodename'));  
-      //console.log($(this).attr('nodeName'));
-      //friends.push($(this.attr('nodeName'));
-      app.handleUsernameClick($(this).attr('nodename'));
-
-    });
-
-  });
+  // should populate our timeline with messages from server
 };
 
 app.handleUsernameClick = function(username) {
@@ -93,11 +109,11 @@ app.handleUsernameClick = function(username) {
   console.log(friends);
 };
 
-
-
-
-
-
+  
+app.handleSubmit = function(message) {
+  console.log('inside handleSubmit');
+  app.send(message);  
+};
 
 
 

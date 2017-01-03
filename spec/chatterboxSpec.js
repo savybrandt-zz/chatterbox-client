@@ -111,7 +111,6 @@ describe('chatterbox', function() {
 
         app.handleUsernameClick.restore();
       });
-
       it('should try to send a message upon clicking submit', function() {
         sinon.spy(app, 'handleSubmit');
 

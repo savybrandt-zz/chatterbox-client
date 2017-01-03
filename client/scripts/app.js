@@ -47,7 +47,14 @@ app.fetch = function() {
     data: ' ',
     contentType: 'application/json',
     success: function (data) {
-      app.renderMessage(data);
+
+      // split up data object to get each message object
+      // data.results =[{message}, {message}..]
+      //iterate over data.results
+      for (var i = 0; i < data.results.length; i++) {
+        //send each message object into renderMessage
+        app.renderMessage(data.results[i]);
+      }
       console.log(data);
       console.log('chatterbox: Message received');
     },

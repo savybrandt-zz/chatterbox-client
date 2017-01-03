@@ -1,10 +1,8 @@
+
 // YOUR CODE HERE:
 var app = {};
 var friends = [];
 
-app.init = function() {
-
-};
 
 app.send = function(message) {
   $.ajax({
@@ -61,15 +59,9 @@ app.clearMessages = function() {
 };
 
 app.renderMessage = function(message) {
-  //create message node from message object
-  // var message = {
-  //   username: 'Mel Brooks',
-  //   text: 'Never underestimate the power of the Schwartz!',
-  //   roomname: 'lobby'
-  // } ;
-  
-  var messageNode = $('#chats').append('<p>' + message.username + ': ' + message.text + '</p>');
-  $(messageNode).addClass(message.username);
+ 
+  var $username = $(message.username);
+  var messageNode = $('#chats').append('<p>' + '<a href=# class=username' +  ' nodename = ' + $username.selector + '>' + $username.selector + '</a>' + ': ' + message.text + '</p>');
 
 };
 
@@ -78,12 +70,28 @@ app.renderRoom = function(roomName) {
 };
 
 
+app.init = function() {
 
-//makeusername clickable
-  //add a friend upon clicking
+  $(document).ready(function() {
 
+    $('.username').on('click', function() { 
+      console.log($(this).attr('nodename'));  
+      //console.log($(this).attr('nodeName'));
+      //friends.push($(this.attr('nodeName'));
+      app.handleUsernameClick($(this).attr('nodename'));
 
+    });
 
+  });
+};
+
+app.handleUsernameClick = function(username) {
+  //this needs to run once a usernmae is clicked
+  if (friends.indexOf(username) === -1) {
+    friends.push(username);   
+  }
+  console.log(friends);
+};
 
 
 

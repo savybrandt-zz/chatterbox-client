@@ -41,10 +41,10 @@ app.fetch = function() {
         //console.log(messages);
         //console.log(JSON.stringify(data.results[i]));
         var current = data.results[i];
-        console.log(current);
-        console.log(current.text);
-        console.log("current room", current.roomname);
-        console.log("current.username", current.username);
+        //console.log(current);
+        //console.log(current.text);
+        //console.log("current room", current.roomname);
+        //console.log("current.username", current.username);
         if (messages.indexOf(JSON.stringify(current)) === -1 && checkForBadBros(current.text) && checkForBadBros(current.username) && checkForBadBros(current.roomname)) {
           console.log("inside");
           app.renderMessage(data.results[i]);
@@ -75,10 +75,11 @@ app.renderMessage = function(message) {
   var messageNode = $('#chats').prepend('<p>' + '<a href=# class=username' + ' nodename = ' + $username.selector + '>' + $username.selector + '</a>' + ': ' + message.text + '</p>');
   // think about using html handlers
   $('.username').on('click', function() { 
-    console.log($(this).attr('nodename'));
-    console.log('inside onlick');  
-    console.log($(this).attr('nodeName'));
     app.handleUsernameClick($(this).attr('nodename'));
+    var friendsPosts = document.querySelectorAll('[nodename="' + $(this).attr('nodename'));
+    for (var i = 0; i < friendsPosts.length; i++) {
+      $(friendsPosts[i]).addClass('friend');
+    }
   });
 };
 
@@ -102,10 +103,10 @@ app.handleUsernameClick = function(username) {
   if (friends.indexOf(username) === -1) {
     friends.push(username);   
   }
-  console.log(friends);
+  //console.log(friends);
 };
 
-console.log(messages);
+//console.log(messages);
   
 app.handleSubmit = function(text, room) {
   var message = {
@@ -113,7 +114,7 @@ app.handleSubmit = function(text, room) {
     text: text,
     roomname: room
   };
-  console.log('inside handleSubmit');
+  //console.log('inside handleSubmit');
   app.send(message);  
 };
 
@@ -124,7 +125,7 @@ $(document).ready(function () {
     var message = document.getElementById('messageText').value;
     var room = document.getElementById('roomName').value;
     app.handleSubmit(message, room);
-    console.log(message);
+    //console.log(message);
     //console.log('inside submit click');
   });
 });  

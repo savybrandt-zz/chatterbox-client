@@ -40,9 +40,13 @@ app.fetch = function() {
       for (var i = 0; i < data.results.length; i++) {
         //console.log(messages);
         //console.log(JSON.stringify(data.results[i]));
-        if (messages.indexOf(JSON.stringify(data.results[i])) === -1) {
-          //sanitize just text and reassign text to sanitized string
-          //console.log(data.results[i]); 
+        var current = data.results[i];
+        console.log(current);
+        console.log(current.text);
+        console.log("current room", current.roomname);
+        console.log("current.username", current.username);
+        if (messages.indexOf(JSON.stringify(current)) === -1 && checkForBadBros(current.text) && checkForBadBros(current.username) && checkForBadBros(current.roomname)) {
+          console.log("inside");
           app.renderMessage(data.results[i]);
         }  
       }
@@ -180,7 +184,19 @@ var getUsername = function() {
   return url;
 };
 
-
+var checkForBadBros = function(text) {
+  if (text === undefined) {
+    return true;
+  }
+  var badBros = ['&', '<', '>', '"', "'", '`', '!', '@', '$', '%', '(', ')', '=', '+', '{', '}', '[', ']'];  
+  var array = text.split('');
+  for (var i = 0; i < array.length; i++) {
+    if (badBros.indexOf(array[i]) !== -1) {
+      return false;
+    }
+  }
+  return true;
+};
 
 
 

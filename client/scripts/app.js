@@ -103,7 +103,7 @@ app.handleUsernameClick = function(username) {
   
 app.handleSubmit = function(text) {
   var message = {
-    username: 'test',
+    username: getUsername(),
     text: text,
     //roomname: '4chan'
   };
@@ -167,6 +167,15 @@ $(document).ready(function () {
  //bar and submit message
  //
 
+
+var getUsername = function() {
+  var url = JSON.stringify(window.location.href);
+  url = url.split('=').slice(1).join(' ').split('');
+  url.splice(url.length - 2, 2);
+  url = url.join('');
+  console.log(url);
+  return url;
+};
 
 
 

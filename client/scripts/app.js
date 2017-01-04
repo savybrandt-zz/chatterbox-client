@@ -41,6 +41,7 @@ app.fetch = function() {
         //console.log(messages);
         //console.log(JSON.stringify(data.results[i]));
         if (messages.indexOf(JSON.stringify(data.results[i])) === -1) {
+          //sanitize just text and reassign text to sanitized string
           //console.log(data.results[i]); 
           app.renderMessage(data.results[i]);
         }  
@@ -100,12 +101,13 @@ app.handleUsernameClick = function(username) {
   console.log(friends);
 };
 
+console.log(messages);
   
-app.handleSubmit = function(text) {
+app.handleSubmit = function(text, room) {
   var message = {
     username: getUsername(),
     text: text,
-    //roomname: '4chan'
+    roomname: room
   };
   console.log('inside handleSubmit');
   app.send(message);  
@@ -116,7 +118,8 @@ $(document).ready(function () {
   $( '.submit' ).on('submit', function( event ) {
     event.preventDefault();
     var message = document.getElementById('messageText').value;
-    app.handleSubmit(message);
+    var room = document.getElementById('roomName').value;
+    app.handleSubmit(message, room);
     console.log(message);
     //console.log('inside submit click');
   });

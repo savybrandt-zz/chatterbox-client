@@ -4,21 +4,8 @@ var app = {};
 var friends = [];
 var messages = [];
 
-$(document).ready(function() {
-  $('.username').on('click', function() { 
-    console.log($(this).attr('nodename'));
-    console.log('inside onlick');  
-    console.log($(this).attr('nodeName'));
-    //friends.push($(this.attr('nodeName'));
-    app.handleUsernameClick($(this).attr('nodename'));
-  });
-  
-  $('#send .submit').on('submit', function() {
-  //debugger;
-    console.log($('#message').val());
-    app.handleSubmit($('#message').val());  
-  });
-});
+// $(document).ready(function() {
+// });
 
 app.server = 'https://api.parse.com/1/classes/messages';
 
@@ -48,18 +35,18 @@ app.fetch = function() {
     data: 'order=-createdAt', 
     success: function (data) {
 
-      console.log('data in success', data);
+      //console.log('data in success', data);
 
       for (var i = 0; i < data.results.length; i++) {
         //console.log(messages);
         //console.log(JSON.stringify(data.results[i]));
         if (messages.indexOf(JSON.stringify(data.results[i])) === -1) {
-          console.log(data.results[i]); 
+          //console.log(data.results[i]); 
           app.renderMessage(data.results[i]);
         }  
       }
 
-      console.log('chatterbox: Message received');
+      //console.log('chatterbox: Message received');
     },
     error: function (data) {
       // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -86,7 +73,6 @@ app.renderMessage = function(message) {
     console.log($(this).attr('nodename'));
     console.log('inside onlick');  
     console.log($(this).attr('nodeName'));
-    //friends.push($(this.attr('nodeName'));
     app.handleUsernameClick($(this).attr('nodename'));
   });
 };
@@ -115,11 +101,26 @@ app.handleUsernameClick = function(username) {
 };
 
   
-app.handleSubmit = function(message) {
+app.handleSubmit = function(text) {
+  var message = {
+    username: 'test',
+    text: text,
+    //roomname: '4chan'
+  };
   console.log('inside handleSubmit');
   app.send(message);  
 };
 
+
+$(document).ready(function () { 
+  $( '.submit' ).on('submit', function( event ) {
+    event.preventDefault();
+    var message = document.getElementById('messageText').value;
+    app.handleSubmit(message);
+    console.log(message);
+    //console.log('inside submit click');
+  });
+});  
 
 // check if new messages are on server
 //use fetch to access messages on server
@@ -162,6 +163,9 @@ app.handleSubmit = function(message) {
    // We need to be communicating with server to get correct messages. 
 
 
+//posting messages
+ //bar and submit message
+ //
 
 
 
